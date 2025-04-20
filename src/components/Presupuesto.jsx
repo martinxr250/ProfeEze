@@ -25,9 +25,9 @@ const Presupuesto = () => {
 
     // Precio base por modalidad
     if (modalidad === "presencial") {
-      precioBase = 5000 // Precio base para clases presenciales
+      precioBase = 12000 // Precio base para clases presenciales
     } else {
-      precioBase = 4500 // Precio base para clases virtuales
+      precioBase = 10000 // Precio base para clases virtuales
     }
 
     // Multiplicador por duración
@@ -49,13 +49,13 @@ const Presupuesto = () => {
   }, [modalidad, materia, duracion])
 
   return (
-    <section id="presupuesto" className="py-20 bg-white">
+    <section id="presupuesto" className="py-20 bg-gradient-to-b from-[#edf5ed] to-[#e6f0e6]">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl md:text-4xl font-bold text-center text-[#2e5e35] mb-12 font-script">
           Solicitar Presupuesto
         </h2>
 
-        <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-8 border border-gray-200">
+        <div className="max-w-3xl mx-auto bg-[#f0f7f0] rounded-lg shadow-lg p-8 border border-[#2e5e35]/20">
           <div className="grid md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-xl font-bold text-[#2e5e35] mb-6">Personaliza tu clase</h3>
@@ -148,7 +148,7 @@ const Presupuesto = () => {
               </div>
             </div>
 
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-[#edf5ed] p-6 rounded-lg">
               <h3 className="text-xl font-bold text-[#2e5e35] mb-6">Tu Presupuesto</h3>
 
               <div className="space-y-4">

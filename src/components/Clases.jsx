@@ -25,6 +25,7 @@ const Clases = () => {
           />
         </svg>
       ),
+      mathIcon: "∑",
     },
     {
       tipo: "Virtuales",
@@ -51,6 +52,7 @@ const Clases = () => {
           />
         </svg>
       ),
+      mathIcon: "∫",
     },
   ]
 
@@ -68,7 +70,7 @@ const Clases = () => {
   const materiasSecundarias = ["Matemáticas", "Física", "Química"]
 
   return (
-    <section id="clases" className="py-20 bg-gray-50">
+    <section id="clases" className="py-20 bg-gradient-to-b from-gray-50 to-white">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl md:text-4xl font-bold text-center text-[#2e5e35] mb-12 font-script">Mis Clases</h2>
 
@@ -76,8 +78,13 @@ const Clases = () => {
           {clasesInfo.map((clase, index) => (
             <div
               key={index}
-              className="bg-white rounded-lg shadow-lg p-6 border-t-4 border-[#2e5e35] hover:shadow-xl transition-shadow"
+              className="bg-white rounded-lg shadow-lg p-6 border-t-4 border-[#2e5e35] hover:shadow-xl transition-shadow relative overflow-hidden"
             >
+              {/* Elemento matemático decorativo */}
+              <div className="absolute top-0 right-0 text-6xl text-[#2e5e35]/5 font-bold -mt-4 -mr-2">
+                {clase.mathIcon}
+              </div>
+
               <div className="flex items-center mb-4">
                 {clase.icono}
                 <h3 className="text-2xl font-bold text-[#2e5e35] ml-4">Clases {clase.tipo}</h3>
@@ -113,8 +120,14 @@ const Clases = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Materias Universitarias */}
-            <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-[#2e5e35]">
-              <h4 className="text-xl font-bold text-[#2e5e35] mb-4">Nivel Universitario</h4>
+            <div className="bg-white p-6 rounded-lg shadow-lg border-l-4 border-[#2e5e35] relative overflow-hidden">
+              {/* Elementos matemáticos decorativos */}
+              <div className="absolute top-2 right-2 text-[#2e5e35]/10 text-5xl font-bold">π</div>
+              <div className="absolute bottom-2 right-2 text-[#2e5e35]/10 text-4xl font-bold">∞</div>
+
+              <h4 className="text-xl font-bold text-[#2e5e35] mb-4 flex items-center">
+                <span className="mr-2">🎓</span> Nivel Universitario
+              </h4>
               <div className="grid grid-cols-1 gap-2">
                 {materiasUniversitarias.map((materia, index) => (
                   <div
@@ -128,8 +141,13 @@ const Clases = () => {
             </div>
 
             {/* Materias Secundarias */}
-            <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-[#ca8149]">
-              <h4 className="text-xl font-bold text-[#ca8149] mb-4">Nivel Secundario</h4>
+            <div className="bg-white p-6 rounded-lg shadow-lg border-l-4 border-[#ca8149] relative overflow-hidden">
+              {/* Elementos matemáticos decorativos */}
+              <div className="absolute top-2 right-2 text-[#ca8149]/10 text-5xl font-bold">√</div>
+              <div className="absolute bottom-2 right-2 text-[#ca8149]/10 text-4xl font-bold">∂</div>
+              <h4 className="text-xl font-bold text-[#ca8149] mb-4 flex items-center">
+                <span className="mr-2">📚</span> Nivel Secundario
+              </h4>
               <div className="grid grid-cols-1 gap-2">
                 {materiasSecundarias.map((materia, index) => (
                   <div
@@ -145,7 +163,7 @@ const Clases = () => {
         </div>
 
         {/* Sección del canal de YouTube */}
-        <div className="max-w-4xl mx-auto mt-16 bg-white p-6 rounded-lg shadow-lg border-t-4 border-[#FF0000]">
+        <div className="max-w-4xl mx-auto mt-16 bg-gradient-to-r from-white to-red-50 p-6 rounded-lg shadow-xl border-t-4 border-[#FF0000]">
           <div className="flex flex-col md:flex-row items-center gap-6">
             <div className="md:w-1/4 flex justify-center">
               <svg
@@ -168,7 +186,7 @@ const Clases = () => {
                 href="https://www.youtube.com/@ezeprofe3545"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center bg-[#FF0000] hover:bg-[#CC0000] text-white font-bold py-2 px-4 rounded-lg transition-colors"
+                className="inline-flex items-center bg-[#FF0000] hover:bg-[#CC0000] text-white font-bold py-2 px-4 rounded-lg transition-colors shadow-md"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

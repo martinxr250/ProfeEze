@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { Clock, Mail, MapPin, Send } from "lucide-react"
 
 const Contacto = () => {
   const [formData, setFormData] = useState({
@@ -10,11 +11,38 @@ const Contacto = () => {
     mensaje: "",
   })
 
-  const [formStatus, setFormStatus] = useState({
-    submitted: false,
-    success: false,
-    message: "",
+  const [errors, setErrors] = useState({
+    nombre: "",
+    email: "",
+    mensaje: "",
   })
+
+  const validateForm = () => {
+    let isValid = true
+    const newErrors = {
+      nombre: "",
+      email: "",
+      mensaje: "",
+    }
+
+    if (formData.nombre.trim().length < 3) {
+      newErrors.nombre = "El nombre debe tener al menos 3 caracteres"
+      isValid = false
+    }
+
+    if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+      newErrors.email = "Por favor ingresa un email válido"
+      isValid = false
+    }
+
+    if (formData.mensaje.trim().length < 10) {
+      newErrors.mensaje = "El mensaje debe tener al menos 10 caracteres"
+      isValid = false
+    }
+
+    setErrors(newErrors)
+    return isValid
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -22,49 +50,78 @@ const Contacto = () => {
       ...prev,
       [name]: value,
     }))
+
+    // Limpiar error cuando el usuario comienza a escribir
+    if (errors[name]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }))
+    }
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    // Aquí iría la lógica para enviar el formulario a un backend
-    // Por ahora simulamos una respuesta exitosa
+    if (!validateForm()) {
+      return
+    }
 
-    setFormStatus({
-      submitted: true,
-      success: true,
-      message: "¡Gracias por tu mensaje! Te responderé a la brevedad.",
-    })
+    // Crear mensaje para WhatsApp
+    const whatsappMessage = encodeURIComponent(
+      `Hola Eze Profe, soy ${formData.nombre}.\n\n` +
+        `${formData.mensaje}\n\n` +
+        `Mi información de contacto:\n` +
+        `Email: ${formData.email}` +
+        (formData.telefono ? `\nTeléfono: ${formData.telefono}` : ""),
+    )
 
-    // Resetear el formulario después de 3 segundos
-    setTimeout(() => {
-      setFormStatus({
-        submitted: false,
-        success: false,
-        message: "",
-      })
-      setFormData({
-        nombre: "",
-        email: "",
-        telefono: "",
-        mensaje: "",
-      })
-    }, 3000)
+    // Abrir WhatsApp con el mensaje
+    window.open(`https://wa.me/5493517394001?text=${whatsappMessage}`, "_blank")
   }
 
   return (
-    <section id="contacto" className="py-20 bg-gray-50">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-center text-[#2e5e35] mb-12 font-script">Contacto</h2>
+    <section
+      id="contacto"
+      className="py-20 relative overflow-hidden"
+      style={{
+        background: `linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('/images/math-physics-bg.png')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      {/* Elementos decorativos matemáticos */}
+      <div className="absolute inset-0 z-0 opacity-10">
+        <div className="absolute top-20 left-10 text-6xl font-bold text-green-800">∫</div>
+        <div className="absolute top-40 right-20 text-7xl font-bold text-green-800">∑</div>
+        <div className="absolute bottom-20 left-1/4 text-8xl font-bold text-green-800">π</div>
+        <div className="absolute bottom-40 right-1/4 text-6xl font-bold text-green-800">√</div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-9xl font-bold text-green-800">
+          E=mc²
+        </div>
+      </div>
 
-        <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
-          <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-200">
-            <h3 className="text-xl font-bold text-[#2e5e35] mb-6">Envíame un mensaje</h3>
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl md:text-5xl font-bold text-green-800 mb-4">Contacto</h2>
+          <p className="text-lg text-gray-700 max-w-2xl mx-auto">
+            ¿Tienes dudas sobre las clases o necesitas ayuda con algún tema específico? Completa el formulario y te
+            responderé por WhatsApp.
+          </p>
+        </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-5 gap-8">
+          {/* Formulario - 3 columnas en desktop */}
+          <div className="md:col-span-3 bg-white rounded-xl shadow-xl p-8 border border-gray-100">
+            <h3 className="text-2xl font-bold text-green-800 mb-6 flex items-center">
+              <Send className="mr-2 h-6 w-6" />
+              Envíame un mensaje por WhatsApp
+            </h3>
+
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div>
                 <label htmlFor="nombre" className="block text-gray-700 font-medium mb-2">
-                  Nombre completo
+                  Nombre completo <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -73,13 +130,15 @@ const Contacto = () => {
                   value={formData.nombre}
                   onChange={handleChange}
                   required
-                  className="w-full border-gray-300 rounded-md shadow-sm focus:border-[#2e5e35] focus:ring focus:ring-[#2e5e35] focus:ring-opacity-50"
+                  placeholder="Ej: María González"
+                  className={`w-full px-4 py-3 rounded-lg border ${errors.nombre ? "border-red-500 bg-red-50" : "border-gray-300"} focus:border-green-600 focus:ring focus:ring-green-200 transition-colors`}
                 />
+                {errors.nombre && <p className="mt-1 text-sm text-red-600">{errors.nombre}</p>}
               </div>
 
               <div>
                 <label htmlFor="email" className="block text-gray-700 font-medium mb-2">
-                  Email
+                  Email <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="email"
@@ -88,8 +147,10 @@ const Contacto = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full border-gray-300 rounded-md shadow-sm focus:border-[#2e5e35] focus:ring focus:ring-[#2e5e35] focus:ring-opacity-50"
+                  placeholder="tu.email@ejemplo.com"
+                  className={`w-full px-4 py-3 rounded-lg border ${errors.email ? "border-red-500 bg-red-50" : "border-gray-300"} focus:border-green-600 focus:ring focus:ring-green-200 transition-colors`}
                 />
+                {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
               </div>
 
               <div>
@@ -102,125 +163,31 @@ const Contacto = () => {
                   name="telefono"
                   value={formData.telefono}
                   onChange={handleChange}
-                  className="w-full border-gray-300 rounded-md shadow-sm focus:border-[#2e5e35] focus:ring focus:ring-[#2e5e35] focus:ring-opacity-50"
+                  placeholder="Ej: +54 9 351 1234567"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-green-600 focus:ring focus:ring-green-200 transition-colors"
                 />
               </div>
 
               <div>
                 <label htmlFor="mensaje" className="block text-gray-700 font-medium mb-2">
-                  Mensaje
+                  Mensaje <span className="text-red-500">*</span>
                 </label>
                 <textarea
                   id="mensaje"
                   name="mensaje"
-                  rows={4}
+                  rows={5}
                   value={formData.mensaje}
                   onChange={handleChange}
                   required
-                  className="w-full border-gray-300 rounded-md shadow-sm focus:border-[#2e5e35] focus:ring focus:ring-[#2e5e35] focus:ring-opacity-50"
+                  placeholder="Escribe aquí tu consulta o mensaje..."
+                  className={`w-full px-4 py-3 rounded-lg border ${errors.mensaje ? "border-red-500 bg-red-50" : "border-gray-300"} focus:border-green-600 focus:ring focus:ring-green-200 transition-colors`}
                 ></textarea>
+                {errors.mensaje && <p className="mt-1 text-sm text-red-600">{errors.mensaje}</p>}
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-[#2e5e35] hover:bg-[#234429] text-white font-bold py-3 px-6 rounded-lg transition-colors"
-                disabled={formStatus.submitted}
-              >
-                {formStatus.submitted ? "Enviando..." : "Enviar mensaje"}
-              </button>
-
-              {formStatus.submitted && (
-                <div
-                  className={`p-4 rounded-md ${formStatus.success ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}
-                >
-                  {formStatus.message}
-                </div>
-              )}
-            </form>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-200">
-            <h3 className="text-xl font-bold text-[#2e5e35] mb-6">Información de contacto</h3>
-
-            <div className="space-y-6">
-              <div className="flex items-start">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-[#ca8149] mr-3 mt-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
-                <div>
-                  <h4 className="font-medium text-gray-900">Ubicación</h4>
-                  <p className="text-gray-700 mt-1">Córdoba Capital, Argentina</p>
-                  <p className="text-gray-700">(Clases presenciales solo en Córdoba)</p>
-                </div>
-              </div>
-
-              <div className="flex items-start">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-[#ca8149] mr-3 mt-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                  />
-                </svg>
-                <div>
-                  <h4 className="font-medium text-gray-900">Email</h4>
-                  <a href="mailto:contacto@ezeprofe.com" className="text-[#2e5e35] hover:underline mt-1">
-                    contacto@ezeprofe.com
-                  </a>
-                </div>
-              </div>
-
-              <div className="flex items-start">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-[#ca8149] mr-3 mt-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <div>
-                  <h4 className="font-medium text-gray-900">Horarios de atención</h4>
-                  <p className="text-gray-700 mt-1">Lunes a Viernes: 9:00 - 20:00</p>
-                  <p className="text-gray-700">Sábados: 9:00 - 13:00</p>
-                </div>
-              </div>
-
-              <a
-                href="https://wa.me/5493512345678?text=Hola%20Eze%20Profe,%20quiero%20consultar%20por%20clases"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center bg-[#25D366] hover:bg-[#20BD5C] text-white font-bold py-3 px-6 rounded-lg transition-colors mt-8"
+                className="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -230,8 +197,52 @@ const Contacto = () => {
                 >
                   <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
                 </svg>
-                Contactar por WhatsApp
-              </a>
+                Enviar mensaje por WhatsApp
+              </button>
+            </form>
+          </div>
+
+          {/* Información de contacto - 2 columnas en desktop */}
+          <div className="md:col-span-2 bg-gradient-to-br from-green-700 to-green-900 text-white rounded-xl shadow-xl p-8">
+            <h3 className="text-2xl font-bold mb-8 border-b border-green-500 pb-4">Información de contacto</h3>
+
+            <div className="space-y-8">
+              <div className="flex items-start">
+                <div className="bg-green-600 p-3 rounded-full mr-4">
+                  <MapPin className="h-6 w-6" />
+                </div>
+                <div>
+                  <h4 className="font-medium text-xl">Ubicación</h4>
+                  <p className="mt-2 text-green-100">Córdoba Capital, Argentina</p>
+                  <p className="text-green-100">(Clases presenciales solo en Córdoba)</p>
+                </div>
+              </div>
+
+              <div className="flex items-start">
+                <div className="bg-green-600 p-3 rounded-full mr-4">
+                  <Mail className="h-6 w-6" />
+                </div>
+                <div>
+                  <h4 className="font-medium text-xl">Email</h4>
+                  <a
+                    href="mailto:contacto@ezeprofe.com"
+                    className="mt-2 block text-green-100 hover:text-white hover:underline transition-colors"
+                  >
+                    contacto@ezeprofe.com
+                  </a>
+                </div>
+              </div>
+
+              <div className="flex items-start">
+                <div className="bg-green-600 p-3 rounded-full mr-4">
+                  <Clock className="h-6 w-6" />
+                </div>
+                <div>
+                  <h4 className="font-medium text-xl">Horarios de atención</h4>
+                  <p className="mt-2 text-green-100">Lunes a Viernes: 9:00 - 20:00</p>
+                  <p className="text-green-100">Sábados: 9:00 - 13:00</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

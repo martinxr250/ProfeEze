@@ -20,7 +20,7 @@ const WhatsAppButton = () => {
 
   return (
     <a
-      href="https://wa.me/5493512345678?text=Hola%20Eze%20Profe,%20quiero%20consultar%20por%20clases"
+      href="https://wa.me/3517394001?text=Hola%20Eze%20Profe,%20quiero%20consultar%20por%20clases"
       target="_blank"
       rel="noopener noreferrer"
       className={`fixed bottom-6 right-6 bg-[#25D366] hover:bg-[#20BD5C] text-white p-3 rounded-full shadow-lg transition-all duration-300 z-50 ${
