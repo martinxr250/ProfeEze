@@ -20,9 +20,9 @@ function MainContent() {
       <main>
         <Inicio />
         <SobreMi />
+        <Presupuesto />
         <Clases />
         <Tips />
-        <Presupuesto />
         <Contacto />
       </main>
       <Footer />

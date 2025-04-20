@@ -2,14 +2,16 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Check, ChevronRight, Clock, MapPin, Monitor, School, ChevronDown } from "lucide-react"
+import { Check, ChevronRight, Clock, MapPin, Monitor, School, ChevronDown, Users } from "lucide-react"
 
 const Presupuesto = () => {
   const [modalidad, setModalidad] = useState("presencial")
   const [materia, setMateria] = useState("algebra_geometria")
   const [nivel, setNivel] = useState("universidad")
   const [duracion, setDuracion] = useState("1h")
+  const [cantidadAlumnos, setCantidadAlumnos] = useState("1")
   const [precio, setPrecio] = useState(0)
+  const [precioOriginal, setPrecioOriginal] = useState(0)
   const [animatePrice, setAnimatePrice] = useState(false)
 
   // Materias organizadas por nivel educativo
@@ -64,14 +66,27 @@ const Presupuesto = () => {
       ajusteMateria = 1.1 // 10% más para materias avanzadas
     }
 
-    const precioFinal = Math.round(precioBase * multiplicador * ajusteMateria)
+    const precioCalculado = Math.round(precioBase * multiplicador * ajusteMateria)
+    setPrecioOriginal(precioCalculado)
+
+    // Aplicar descuento por cantidad de alumnos
+    let descuentoGrupal = 1
+    if (cantidadAlumnos === "2") {
+      descuentoGrupal = 0.85 // 15% de descuento por alumno para 2 alumnos
+    } else if (cantidadAlumnos === "3") {
+      descuentoGrupal = 0.75 // 25% de descuento por alumno para 3 alumnos
+    } else if (cantidadAlumnos === "4+") {
+      descuentoGrupal = 0.7 // 30% de descuento por alumno para 4 o más alumnos
+    }
+
+    const precioFinal = Math.round(precioCalculado * descuentoGrupal)
 
     // Trigger animation when price changes
     setAnimatePrice(true)
     setTimeout(() => setAnimatePrice(false), 700)
 
     setPrecio(precioFinal)
-  }, [modalidad, materia, duracion, nivel])
+  }, [modalidad, materia, duracion, nivel, cantidadAlumnos])
 
   // Cuando cambia el nivel, actualizar la materia seleccionada a la primera del nuevo nivel
   useEffect(() => {
@@ -98,6 +113,55 @@ const Presupuesto = () => {
     if (duracion === "1h") return "1 hora"
     if (duracion === "2h") return "2 horas"
     return "Mensual (8 horas)"
+  }
+
+  // Función para obtener el texto de cantidad de alumnos
+  const getAlumnosText = () => {
+    if (cantidadAlumnos === "1") return "Individual"
+    if (cantidadAlumnos === "2") return "2 alumnos (15% desc. c/u)"
+    if (cantidadAlumnos === "3") return "3 alumnos (25% desc. c/u)"
+    return "4 o más alumnos (30% desc. c/u)"
+  }
+
+  // Función para crear un mensaje personalizado para WhatsApp
+  const createWhatsAppMessage = () => {
+    const nivelText = nivel === "universidad" ? "Universidad" : "Secundario"
+    const modalidadText = modalidad === "presencial" ? "Presencial" : "Virtual"
+    const materiaText = getMateriaName()
+    const duracionText = getDuracionText()
+    const alumnosText =
+      cantidadAlumnos === "1" ? "Individual" : `${cantidadAlumnos === "4+" ? "4 o más" : cantidadAlumnos} alumnos`
+    const precioText = precio.toLocaleString()
+
+    // Calcular descuento aplicado
+    let descuentoText = ""
+    if (cantidadAlumnos !== "1") {
+      const descuentoPorcentaje = cantidadAlumnos === "2" ? "15%" : cantidadAlumnos === "3" ? "25%" : "30%"
+      descuentoText = `\n💰 *Descuento grupal aplicado:* ${descuentoPorcentaje} por alumno`
+    }
+
+    // Crear mensaje personalizado
+    const message = encodeURIComponent(
+      `¡Hola Eze Profe! 👋\n\n` +
+        `Me interesa tomar clases contigo y he armado el siguiente presupuesto:\n\n` +
+        `📚 *Nivel:* ${nivelText}\n` +
+        `🏫 *Modalidad:* ${modalidadText}\n` +
+        `📖 *Materia:* ${materiaText}\n` +
+        `⏱️ *Duración:* ${duracionText}\n` +
+        `👥 *Cantidad de alumnos:* ${alumnosText}${descuentoText}\n` +
+        `💵 *Precio por alumno:* $${precioText}\n\n` +
+        `Me gustaría coordinar una clase. ¿Cuándo podrías comenzar? ¿Tienes disponibilidad en los próximos días?`,
+    )
+
+    return `https://wa.me/5493517394001?text=${message}`
+  }
+
+  // Calcular el porcentaje de descuento
+  const getDiscountPercentage = () => {
+    if (cantidadAlumnos === "1") return 0
+    if (cantidadAlumnos === "2") return 15
+    if (cantidadAlumnos === "3") return 25
+    return 30 // para 4+
   }
 
   return (
@@ -270,6 +334,36 @@ const Presupuesto = () => {
                       </button>
                     </div>
                   </div>
+
+                  {/* Cantidad de alumnos - NUEVO */}
+                  <div>
+                    <label className="block text-gray-700 font-medium mb-3">Cantidad de Alumnos</label>
+                    <div className="grid grid-cols-4 gap-2">
+                      {["1", "2", "3", "4+"].map((num) => (
+                        <button
+                          key={num}
+                          type="button"
+                          onClick={() => setCantidadAlumnos(num)}
+                          className={`flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all duration-200 ${
+                            cantidadAlumnos === num
+                              ? "border-[#2e5e35] bg-[#2e5e35]/5 text-[#2e5e35]"
+                              : "border-gray-200 hover:border-gray-300 text-gray-600"
+                          }`}
+                        >
+                          <Users className="mb-1 h-5 w-5" />
+                          <span>{num}</span>
+                          {num !== "1" && (
+                            <span className="text-xs mt-1 text-[#ca8149]">
+                              {num === "2" ? "-15%" : num === "3" ? "-25%" : "-30%"}
+                            </span>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="text-sm text-gray-500 mt-2">
+                      * El precio mostrado es por alumno. Descuentos aplicados para grupos.
+                    </p>
+                  </div>
                 </div>
               </div>
 
@@ -313,11 +407,33 @@ const Presupuesto = () => {
                       <p className="font-medium">{getDuracionText()}</p>
                     </div>
                   </div>
+
+                  {/* Nuevo: Cantidad de alumnos */}
+                  <div className="flex items-center p-4 bg-white/10 rounded-lg">
+                    <Users className="h-5 w-5 mr-3 text-[#ca8149]" />
+                    <div>
+                      <p className="text-sm text-white/70">Alumnos</p>
+                      <p className="font-medium">{getAlumnosText()}</p>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="mt-8 pt-6 border-t border-white/20">
+                  {cantidadAlumnos !== "1" && (
+                    <div className="mb-4 p-3 bg-[#ca8149]/20 rounded-lg">
+                      <div className="flex justify-between items-center">
+                        <span className="text-white/80">Precio original:</span>
+                        <span className="text-lg line-through text-white/70">${precioOriginal.toLocaleString()}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-white/80">Descuento grupal:</span>
+                        <span className="text-lg text-[#ca8149]">-{getDiscountPercentage()}%</span>
+                      </div>
+                    </div>
+                  )}
+
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-white/80">Precio estimado:</span>
+                    <span className="text-white/80">Precio por alumno:</span>
                     <motion.div
                       animate={{ scale: animatePrice ? 1.1 : 1 }}
                       transition={{ type: "spring", stiffness: 500, damping: 10 }}
@@ -330,20 +446,15 @@ const Presupuesto = () => {
                     * Los precios pueden variar según necesidades específicas.
                   </p>
 
-                  <button
+                  <a
+                    href={createWhatsAppMessage()}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-full bg-[#ca8149] hover:bg-[#ca8149]/90 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg flex items-center justify-center"
-                    onClick={() => {
-                      // Aquí se podría implementar lógica para enviar el presupuesto por email
-                      // o redirigir al formulario de contacto
-                      const contactoSection = document.getElementById("contacto")
-                      if (contactoSection) {
-                        contactoSection.scrollIntoView({ behavior: "smooth" })
-                      }
-                    }}
                   >
-                    Solicitar Clase
+                    Solicitar Clase por WhatsApp
                     <ChevronRight className="ml-2 h-5 w-5" />
-                  </button>
+                  </a>
                 </div>
               </div>
             </div>
@@ -376,10 +487,10 @@ const Presupuesto = () => {
 
           <div className="bg-white p-6 rounded-xl shadow-md">
             <div className="w-12 h-12 bg-[#2e5e35]/10 rounded-full flex items-center justify-center mb-4">
-              <Check className="h-6 w-6 text-[#2e5e35]" />
+              <Users className="h-6 w-6 text-[#2e5e35]" />
             </div>
-            <h4 className="text-lg font-bold text-gray-800 mb-2">Soporte Continuo</h4>
-            <p className="text-gray-600">Consultas adicionales entre clases sin costo extra.</p>
+            <h4 className="text-lg font-bold text-gray-800 mb-2">Descuentos Grupales</h4>
+            <p className="text-gray-600">Ahorra hasta un 30% por alumno al tomar clases en grupo.</p>
           </div>
         </motion.div>
       </div>
