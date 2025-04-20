@@ -7,13 +7,15 @@ const Inicio = () => {
       id="inicio"
       className="min-h-screen flex items-center justify-center bg-[#2e5e35] relative overflow-hidden"
       style={{
-        backgroundImage: "url('/chalkboard-bg.jpg')",
+        backgroundImage:
+          "url('https://static.vecteezy.com/system/resources/previews/038/261/698/non_2x/ai-generated-chalk-black-board-blackboard-chalkboard-background-free-photo.jpg')",
         backgroundSize: "cover",
         backgroundPosition: "center",
-        backgroundBlendMode: "overlay",
+        backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="absolute inset-0 bg-[#2e5e35] opacity-80"></div>
+      {/* Overlay para asegurar legibilidad del texto */}
+      <div className="absolute inset-0 bg-[#2e5e35] opacity-40"></div>
 
       <div className="container mx-auto px-4 z-10 text-center">
         <img
@@ -22,9 +24,11 @@ const Inicio = () => {
           className="mx-auto h-32 md:h-40 mb-6 animate-bounce"
         />
 
-        <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 font-script">Aprendé con Eze Profe</h1>
+        <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 font-script chalk-effect">
+          Aprendé con Eze Profe
+        </h1>
 
-        <p className="text-xl md:text-2xl text-white mb-8 max-w-2xl mx-auto">
+        <p className="text-xl md:text-2xl text-white mb-8 max-w-2xl mx-auto chalk-effect">
           Clases particulares para estudiantes de ingeniería en UTN Córdoba. Presenciales y virtuales.
         </p>
 

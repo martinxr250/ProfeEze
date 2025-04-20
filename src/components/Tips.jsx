@@ -1,3 +1,5 @@
+import ChalkboardBackground from "./ChalkboardBackground"
+
 const Tips = () => {
   const tips = [
     {
@@ -66,11 +68,13 @@ const Tips = () => {
           ))}
         </div>
 
-        <div className="mt-12 text-center">
-          <p className="text-[#2e5e35] italic">
-            "El éxito en la UTN no es solo cuestión de inteligencia, sino de constancia, organización y buenas
-            estrategias de estudio."
-          </p>
+        <div className="mt-12">
+          <ChalkboardBackground className="max-w-3xl mx-auto">
+            <p className="text-white text-center text-xl chalk-effect">
+              "El éxito en la UTN no es solo cuestión de inteligencia, sino de constancia, organización y buenas
+              estrategias de estudio."
+            </p>
+          </ChalkboardBackground>
         </div>
       </div>
     </section>
