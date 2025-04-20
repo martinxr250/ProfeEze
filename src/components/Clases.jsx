@@ -54,18 +54,18 @@ const Clases = () => {
     },
   ]
 
-  const materias = [
-    "Álgebra Lineal",
-    "Análisis Matemático I y II",
-    "Física I y II",
-    "Sistemas Operativos",
-    "Programación",
-    "Estadística",
-    "Cálculo Numérico",
-    "Ecuaciones Diferenciales",
-    "Electromagnetismo",
-    "Estructuras de Datos",
+  const materiasUniversitarias = [
+    "Álgebra y Geometría",
+    "Análisis Matemático 1 y 2",
+    "Física 1 y 2",
+    "Química General",
+    "ANYCA",
+    "Sistema de Representación",
+    "Cálculo Avanzado",
+    "Otras materias afines",
   ]
+
+  const materiasSecundarias = ["Matemáticas", "Física", "Química"]
 
   return (
     <section id="clases" className="py-20 bg-gray-50">
@@ -108,18 +108,79 @@ const Clases = () => {
           ))}
         </div>
 
-        <div className="max-w-3xl mx-auto">
-          <h3 className="text-2xl font-bold text-center text-[#2e5e35] mb-6">Materias Disponibles</h3>
+        <div className="max-w-4xl mx-auto">
+          <h3 className="text-2xl font-bold text-center text-[#2e5e35] mb-8">Materias Disponibles</h3>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {materias.map((materia, index) => (
-              <div
-                key={index}
-                className="bg-white border border-gray-200 rounded-lg p-4 text-center hover:bg-[#2e5e35] hover:text-white transition-colors"
-              >
-                {materia}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Materias Universitarias */}
+            <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-[#2e5e35]">
+              <h4 className="text-xl font-bold text-[#2e5e35] mb-4">Nivel Universitario</h4>
+              <div className="grid grid-cols-1 gap-2">
+                {materiasUniversitarias.map((materia, index) => (
+                  <div
+                    key={index}
+                    className="bg-gray-50 p-3 rounded-lg border border-gray-200 hover:bg-[#2e5e35]/10 transition-colors"
+                  >
+                    {materia}
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+
+            {/* Materias Secundarias */}
+            <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-[#ca8149]">
+              <h4 className="text-xl font-bold text-[#ca8149] mb-4">Nivel Secundario</h4>
+              <div className="grid grid-cols-1 gap-2">
+                {materiasSecundarias.map((materia, index) => (
+                  <div
+                    key={index}
+                    className="bg-gray-50 p-3 rounded-lg border border-gray-200 hover:bg-[#ca8149]/10 transition-colors"
+                  >
+                    {materia}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Sección del canal de YouTube */}
+        <div className="max-w-4xl mx-auto mt-16 bg-white p-6 rounded-lg shadow-lg border-t-4 border-[#FF0000]">
+          <div className="flex flex-col md:flex-row items-center gap-6">
+            <div className="md:w-1/4 flex justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-24 w-24 text-[#FF0000]"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
+              </svg>
+            </div>
+            <div className="md:w-3/4">
+              <h3 className="text-2xl font-bold text-gray-800 mb-2">Canal de YouTube: Eze Profe</h3>
+              <p className="text-gray-700 mb-4">
+                Complementa tus clases particulares con mi contenido gratuito en YouTube. Encontrarás explicaciones
+                detalladas de temas clave, resolución de ejercicios típicos de exámenes y consejos para mejorar tu
+                rendimiento académico.
+              </p>
+              <a
+                href="https://www.youtube.com/@ezeprofe3545"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center bg-[#FF0000] hover:bg-[#CC0000] text-white font-bold py-2 px-4 rounded-lg transition-colors"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 mr-2"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
+                </svg>
+                Visitar Canal
+              </a>
+            </div>
           </div>
         </div>
       </div>

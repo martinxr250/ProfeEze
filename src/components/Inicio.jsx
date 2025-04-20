@@ -5,7 +5,7 @@ const Inicio = () => {
   return (
     <section
       id="inicio"
-      className="min-h-screen flex items-center justify-center bg-[#2e5e35] relative overflow-hidden"
+      className="min-h-screen flex items-center justify-center relative overflow-hidden"
       style={{
         backgroundImage:
           "url('https://static.vecteezy.com/system/resources/previews/038/261/698/non_2x/ai-generated-chalk-black-board-blackboard-chalkboard-background-free-photo.jpg')",
@@ -28,11 +28,15 @@ const Inicio = () => {
           Aprendé con Eze Profe
         </h1>
 
-        <p className="text-xl md:text-2xl text-white mb-8 max-w-2xl mx-auto chalk-effect">
-          Clases particulares para estudiantes de ingeniería en UTN Córdoba. Presenciales y virtuales.
+        <p className="text-xl md:text-2xl text-white mb-4 max-w-2xl mx-auto chalk-effect">
+          Clases particulares para estudiantes de nivel secundario y universitario
         </p>
 
-        <div className="flex flex-col md:flex-row justify-center gap-4">
+        <p className="text-lg md:text-xl text-white mb-8 max-w-2xl mx-auto chalk-effect">
+          <span className="font-bold">"Hago fácil lo difícil"</span>
+        </p>
+
+        <div className="flex flex-col md:flex-row justify-center gap-4 mb-8">
           <Link
             to="presupuesto"
             spy={true}
@@ -54,6 +58,24 @@ const Inicio = () => {
           >
             Conocer Clases
           </Link>
+        </div>
+
+        {/* Información del canal de YouTube */}
+        <div className="bg-white/20 backdrop-blur-sm p-4 rounded-lg max-w-md mx-auto">
+          <a
+            href="https://www.youtube.com/@ezeprofe3545"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center text-white hover:text-[#ca8149] transition-colors"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mr-2" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
+            </svg>
+            <div className="text-left">
+              <p className="font-bold">¡Visita mi canal de YouTube!</p>
+              <p className="text-sm">Clases gratuitas y explicaciones paso a paso</p>
+            </div>
+          </a>
         </div>
       </div>
 
