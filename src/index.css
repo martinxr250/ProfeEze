@@ -1,0 +1,50 @@
+@import url("https://fonts.googleapis.com/css2?family=Schoolbell&family=Kalam:wght@400;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #2e5e35;
+  --color-secondary: #ca8149;
+  --color-white: #ffffff;
+  --color-black: #000000;
+}
+
+body {
+  font-family: "Schoolbell", cursive;
+  color: #333;
+  scroll-behavior: smooth;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.font-script {
+  font-family: "Kalam", cursive;
+}
+
+/* Para textos que necesiten ser más formales o legibles */
+.font-normal {
+  font-family: "Schoolbell", cursive;
+}
+
+/* Smooth scrolling for the entire page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Estilo para inputs y botones para mantener legibilidad */
+input, select, textarea, button {
+  font-family: "Schoolbell", cursive;
+}
+
+/* Ajuste para tamaños de texto */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Kalam", cursive;
+  font-weight: 700;
+}
+
+/* Efecto de tiza para textos especiales */
+.chalk-effect {
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+}

@@ -1,0 +1,1 @@
+export const API_URL = window.location.href.includes("vercel") ? "https://stone-market-back.vercel.app/stone/api" : "http://localhost:4001/stone/api";
