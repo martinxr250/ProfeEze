@@ -2,35 +2,51 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Check, ChevronRight, Clock, MapPin, Monitor, School } from "lucide-react"
+import { Check, ChevronRight, Clock, MapPin, Monitor, School, ChevronDown } from "lucide-react"
 
 const Presupuesto = () => {
   const [modalidad, setModalidad] = useState("presencial")
-  const [materia, setMateria] = useState("algebra")
+  const [materia, setMateria] = useState("algebra_geometria")
+  const [nivel, setNivel] = useState("universidad")
   const [duracion, setDuracion] = useState("1h")
   const [precio, setPrecio] = useState(0)
   const [animatePrice, setAnimatePrice] = useState(false)
 
-  const materias = [
-    { id: "algebra", nombre: "Álgebra Lineal", icon: "📊" },
-    { id: "analisis1", nombre: "Análisis Matemático I", icon: "📈" },
-    { id: "analisis2", nombre: "Análisis Matemático II", icon: "📉" },
-    { id: "fisica1", nombre: "Física I", icon: "⚛️" },
-    { id: "fisica2", nombre: "Física II", icon: "🔋" },
-    { id: "sistemas", nombre: "Sistemas Operativos", icon: "💻" },
-    { id: "programacion", nombre: "Programación", icon: "👨‍💻" },
-    { id: "estadistica", nombre: "Estadística", icon: "📊" },
-  ]
+  // Materias organizadas por nivel educativo
+  const materiasPorNivel = {
+    universidad: [
+      { id: "algebra_geometria", nombre: "Álgebra y Geometría", icon: "📐" },
+      { id: "analisis1", nombre: "Análisis Matemático 1", icon: "📈" },
+      { id: "analisis2", nombre: "Análisis Matemático 2", icon: "📉" },
+      { id: "fisica1", nombre: "Física 1", icon: "⚛️" },
+      { id: "fisica2", nombre: "Física 2", icon: "🔋" },
+      { id: "quimica_general", nombre: "Química General", icon: "🧪" },
+      { id: "anyca", nombre: "ANYCA", icon: "🔢" },
+      { id: "sistema_representacion", nombre: "Sistema de Representación", icon: "📝" },
+      { id: "calculo_avanzado", nombre: "Cálculo Avanzado", icon: "🧮" },
+      { id: "otras_afines", nombre: "Otras materias afines", icon: "📚" },
+    ],
+    secundario: [
+      { id: "matematicas", nombre: "Matemáticas", icon: "🔢" },
+      { id: "fisica", nombre: "Física", icon: "⚡" },
+      { id: "quimica", nombre: "Química", icon: "🧪" },
+    ],
+  }
+
+  // Obtener las materias según el nivel seleccionado
+  const getMateriasByNivel = () => {
+    return materiasPorNivel[nivel] || []
+  }
 
   // Calcular precio basado en selecciones
   useEffect(() => {
     let precioBase = 0
 
-    // Precio base por modalidad
+    // Precio base por modalidad y nivel
     if (modalidad === "presencial") {
-      precioBase = 12000 // Precio base para clases presenciales
+      precioBase = nivel === "universidad" ? 12000 : 10000 // Precio base para clases presenciales
     } else {
-      precioBase = 10000 // Precio base para clases virtuales
+      precioBase = nivel === "universidad" ? 10000 : 8500 // Precio base para clases virtuales
     }
 
     // Multiplicador por duración
@@ -43,7 +59,8 @@ const Presupuesto = () => {
 
     // Ajuste por materia (algunas materias pueden ser más caras)
     let ajusteMateria = 1
-    if (["analisis2", "fisica2", "sistemas"].includes(materia)) {
+    const materiasAvanzadas = ["analisis2", "fisica2", "calculo_avanzado", "anyca"]
+    if (materiasAvanzadas.includes(materia)) {
       ajusteMateria = 1.1 // 10% más para materias avanzadas
     }
 
@@ -54,16 +71,26 @@ const Presupuesto = () => {
     setTimeout(() => setAnimatePrice(false), 700)
 
     setPrecio(precioFinal)
-  }, [modalidad, materia, duracion])
+  }, [modalidad, materia, duracion, nivel])
+
+  // Cuando cambia el nivel, actualizar la materia seleccionada a la primera del nuevo nivel
+  useEffect(() => {
+    const materiasDisponibles = getMateriasByNivel()
+    if (materiasDisponibles.length > 0) {
+      setMateria(materiasDisponibles[0].id)
+    }
+  }, [nivel])
 
   // Función para obtener el nombre de la materia seleccionada
   const getMateriaName = () => {
-    return materias.find((m) => m.id === materia)?.nombre || ""
+    const materiasDisponibles = getMateriasByNivel()
+    return materiasDisponibles.find((m) => m.id === materia)?.nombre || ""
   }
 
   // Función para obtener el icono de la materia seleccionada
   const getMateriaIcon = () => {
-    return materias.find((m) => m.id === materia)?.icon || ""
+    const materiasDisponibles = getMateriasByNivel()
+    return materiasDisponibles.find((m) => m.id === materia)?.icon || ""
   }
 
   // Función para obtener el texto de duración
@@ -107,6 +134,40 @@ const Presupuesto = () => {
                 </h3>
 
                 <div className="space-y-8">
+                  {/* Nivel educativo */}
+                  <div>
+                    <label className="block text-gray-700 font-medium mb-3">Nivel Educativo</label>
+                    <div className="grid grid-cols-2 gap-4">
+                      <button
+                        type="button"
+                        onClick={() => setNivel("universidad")}
+                        className={`flex items-center justify-center p-4 rounded-xl border-2 transition-all duration-200 ${
+                          nivel === "universidad"
+                            ? "border-[#2e5e35] bg-[#2e5e35]/5 text-[#2e5e35]"
+                            : "border-gray-200 hover:border-gray-300 text-gray-600"
+                        }`}
+                      >
+                        <span className="mr-2 text-xl">🎓</span>
+                        <span>Universidad</span>
+                        {nivel === "universidad" && <Check className="ml-2 h-4 w-4 text-[#2e5e35]" />}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setNivel("secundario")}
+                        className={`flex items-center justify-center p-4 rounded-xl border-2 transition-all duration-200 ${
+                          nivel === "secundario"
+                            ? "border-[#2e5e35] bg-[#2e5e35]/5 text-[#2e5e35]"
+                            : "border-gray-200 hover:border-gray-300 text-gray-600"
+                        }`}
+                      >
+                        <span className="mr-2 text-xl">📚</span>
+                        <span>Secundario</span>
+                        {nivel === "secundario" && <Check className="ml-2 h-4 w-4 text-[#2e5e35]" />}
+                      </button>
+                    </div>
+                  </div>
+
                   {/* Modalidad */}
                   <div>
                     <label className="block text-gray-700 font-medium mb-3">Modalidad</label>
@@ -153,14 +214,14 @@ const Presupuesto = () => {
                         onChange={(e) => setMateria(e.target.value)}
                         className="w-full p-4 pr-10 border-2 border-gray-200 rounded-xl appearance-none focus:border-[#2e5e35] focus:outline-none focus:ring-0 text-gray-700 bg-white transition-all duration-200 hover:border-gray-300"
                       >
-                        {materias.map((mat) => (
+                        {getMateriasByNivel().map((mat) => (
                           <option key={mat.id} value={mat.id}>
                             {mat.icon} {mat.nombre}
                           </option>
                         ))}
                       </select>
                       <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
-                        <ChevronRight className="h-5 w-5 transform rotate-90" />
+                        <ChevronDown className="h-5 w-5" />
                       </div>
                     </div>
                   </div>
@@ -217,6 +278,14 @@ const Presupuesto = () => {
                 <h3 className="text-2xl font-bold mb-8">Tu Presupuesto</h3>
 
                 <div className="space-y-6 flex-grow">
+                  <div className="flex items-center p-4 bg-white/10 rounded-lg">
+                    <div className="mr-3 text-[#ca8149] text-xl">{nivel === "universidad" ? "🎓" : "📚"}</div>
+                    <div>
+                      <p className="text-sm text-white/70">Nivel</p>
+                      <p className="font-medium">{nivel === "universidad" ? "Universidad" : "Secundario"}</p>
+                    </div>
+                  </div>
+
                   <div className="flex items-center p-4 bg-white/10 rounded-lg">
                     {modalidad === "presencial" ? (
                       <MapPin className="h-5 w-5 mr-3 text-[#ca8149]" />
