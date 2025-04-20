@@ -32,7 +32,7 @@ export default function Navbar() {
   return (
     <nav
       className={`fixed w-full z-50 transition-all duration-300 ${
-        isScrolled ? "bg-white/95 backdrop-blur-sm shadow-lg py-2" : "bg-transparent py-4"
+        isScrolled ? "bg-white/95 backdrop-blur-sm shadow-lg py-3" : "bg-transparent py-6"
       }`}
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
@@ -45,7 +45,7 @@ export default function Navbar() {
           duration={500}
           className="flex items-center cursor-pointer group"
         >
-          <div className="relative h-12 w-12 overflow-hidden transition-transform duration-300 group-hover:scale-105">
+          <div className="relative h-16 w-16 overflow-hidden transition-transform duration-300 group-hover:scale-105">
             <img
               src="/logo-ezeprofe.png"
               alt="Eze Profe Logo"
@@ -56,7 +56,7 @@ export default function Navbar() {
             />
           </div>
           <span
-            className={`ml-2 font-bold text-xl transition-colors duration-300 ${
+            className={`ml-3 font-bold text-2xl transition-colors duration-300 ${
               isScrolled ? "text-[#2e5e35]" : "text-white"
             } group-hover:text-[#ca8149]`}
           >
@@ -65,7 +65,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-8">
+        <div className="hidden md:flex items-center space-x-10">
           {navLinks.map((link) => (
             <Link
               key={link.to}
@@ -74,7 +74,7 @@ export default function Navbar() {
               smooth={true}
               offset={-70}
               duration={500}
-              className={`cursor-pointer font-medium relative py-2 transition-colors duration-300 ${
+              className={`cursor-pointer font-medium text-lg relative py-2 transition-colors duration-300 ${
                 isScrolled ? "text-[#2e5e35]" : "text-white"
               } hover:text-[#ca8149] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-[#ca8149] after:transition-all after:duration-300 hover:after:w-full`}
             >
@@ -85,12 +85,12 @@ export default function Navbar() {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden flex items-center justify-center h-10 w-10 rounded-full bg-white/10 backdrop-blur-sm text-[#2e5e35] transition-colors duration-300 hover:bg-white/20"
+          className="md:hidden flex items-center justify-center h-12 w-12 rounded-full bg-white/10 backdrop-blur-sm text-[#2e5e35] transition-colors duration-300 hover:bg-white/20"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label={mobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
           aria-expanded={mobileMenuOpen}
         >
-          {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
       </div>
 
@@ -109,7 +109,7 @@ export default function Navbar() {
               smooth={true}
               offset={-70}
               duration={500}
-              className={`text-[#2e5e35] font-medium py-3 transition-colors hover:text-[#ca8149] ${
+              className={`text-[#2e5e35] font-medium text-lg py-4 transition-colors hover:text-[#ca8149] ${
                 index === 0 ? "border-t border-gray-100" : ""
               }`}
               onClick={() => setMobileMenuOpen(false)}
