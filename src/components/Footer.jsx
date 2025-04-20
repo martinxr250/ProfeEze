@@ -263,7 +263,7 @@ const Footer = () => {
 
           {/* Copyright */}
           <div className="mt-12 pt-6 border-t border-white/20 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm text-white/70">&copy; {currentYear} Eze Profe. Todos los derechos reservados.</p>
+            <p className="text-sm text-white/70">&copy; {currentYear} Eze Profe. Todos los derechos reservados.  Desarrollado por SkarIT </p>
             <p className="text-sm text-white/70 mt-2 md:mt-0">
               Desarrollado por{" "}
               <a
