@@ -56,7 +56,7 @@ const Presupuesto = () => {
     if (duracion === "2h") {
       multiplicador = 1.8 // Descuento por 2 horas
     } else if (duracion === "mensual") {
-      multiplicador = 6 // Precio mensual (8 horas)
+      multiplicador = 7 // Precio mensual (8 horas)
     }
 
     // Ajuste por materia (algunas materias pueden ser más caras)
