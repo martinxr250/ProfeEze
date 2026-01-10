@@ -46,9 +46,9 @@ const Presupuesto = () => {
 
     // Precio base por modalidad y nivel
     if (modalidad === "presencial") {
-      precioBase = nivel === "universidad" ? 13500 : 10500 // Precio base para clases presenciales
+      precioBase = nivel === "universidad" ? 15000 : 10500 // Precio base para clases presenciales
     } else {
-      precioBase = nivel === "universidad" ? 12500 : 9000 // Precio base para clases virtuales
+      precioBase = nivel === "universidad" ? 14500 : 9000 // Precio base para clases virtuales
     }
 
     // Multiplicador por duración
